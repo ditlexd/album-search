@@ -1,12 +1,25 @@
 import { useState } from "react";
 import { Combobox } from "@headlessui/react";
+import { Artist } from "../pages/api/artists/[artist]";
+
+type Item = { displayValue: string; id: string };
 
 type Props = {
   onInputChange: (input: string) => void;
-  items: { displayValue: string }[];
+  items: Item[];
+  onSelect: (item: Item) => void;
 };
-export default function AutoComplete({ onInputChange, items }: Props) {
-  const [selectedPerson, setSelectedPerson] = useState(null);
+export default function AutoComplete({
+  onInputChange,
+  items,
+  onSelect,
+}: Props) {
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+
+  async function itemSelected(item: Item) {
+    setSelectedItem(item);
+    onSelect(item);
+  }
 
   async function inputChanged(input: string) {
     onInputChange(input);
@@ -14,10 +27,7 @@ export default function AutoComplete({ onInputChange, items }: Props) {
 
   return (
     <div className={"flex w-full gap-4"}>
-      <Combobox
-        value={selectedPerson}
-        onChange={(person) => setSelectedPerson(person)}
-      >
+      <Combobox value={selectedItem} onChange={itemSelected}>
         <div className={"relative w-full"}>
           <Combobox.Input
             className={"h-20 w-full bg-gray-800 pl-2 text-3xl text-gray-300"}
@@ -29,8 +39,11 @@ export default function AutoComplete({ onInputChange, items }: Props) {
             >
               <p className={"pl-1"}>Search results</p>
               <div>
-                {items.map(({ displayValue }, i) => (
-                  <Combobox.Option key={displayValue + i} value={displayValue}>
+                {items.map(({ displayValue, id }, i) => (
+                  <Combobox.Option
+                    key={displayValue + i}
+                    value={{ displayValue, id }}
+                  >
                     {({ selected, active }) => (
                       <p className={active ? "bg-white" : "" + "pl-3"}>
                         {displayValue}

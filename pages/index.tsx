@@ -1,39 +1,39 @@
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import AutoComplete from "../components/auto-complete";
-
-const people = [
-  "Prince",
-  "Prince & The Revolution",
-  "Prince Royce",
-  "Eminem",
-  "Nirvana",
-];
+import AlbumList from "../components/album-list";
+import { Artist } from "./api/artists/[artist]";
 
 const Home: NextPage = () => {
-  const [artists, setArtists] = useState<string[]>([]);
+  const [artists, setArtists] = useState<Artist[]>([]);
+  const [selectedArtistId, setSelectedArtistId] = useState<Pick<
+    Artist,
+    "id"
+  > | null>(null);
 
   async function fetchArtists(query: string) {
-    console.log("Fetching");
     const fetchedArtists = await fetch("/api/artists/" + query).then((res) =>
       res.json()
     );
 
-    console.log(fetchedArtists);
+    setArtists(fetchedArtists);
+  }
 
-    setArtists(fetchedArtists.artists);
+  async function onArtistSelected(artist: Pick<Artist, "id">) {
+    setSelectedArtistId(artist);
   }
 
   return (
-    <div className={"grid h-screen w-screen grid-cols-6 bg-black pt-10"}>
+    <div className={"grid min-h-screen w-screen grid-cols-6 bg-black pt-10"}>
       <div className={"col-span-4 col-start-2"}>
         <AutoComplete
+          onSelect={onArtistSelected}
           onInputChange={fetchArtists}
-          items={artists.map((p) => {
-            return { displayValue: p };
+          items={artists.map(({ name, id }) => {
+            return { displayValue: name, id };
           })}
         />
-        ;
+        {selectedArtistId && <AlbumList artistId={selectedArtistId.id} />}
       </div>
     </div>
   );

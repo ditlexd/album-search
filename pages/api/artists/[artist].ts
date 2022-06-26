@@ -1,12 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-type Data = {
-  artists: string[];
-};
+export type Artist = { name: string; id: string };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Artist[]>
 ) {
   const { artist } = req.query;
 
@@ -15,11 +13,10 @@ export default async function handler(
     return;
   }
 
-  const artists = await fetch(
+  const { data }: { data: any[] } = await fetch(
     `https://api.deezer.com/search/artist?q=${artist}`
-  );
-  const { data }: { data: any[] } = await artists.json();
-  console.log(data.slice(0, 5).map((i) => i.name));
-  const artistList: string[] = data.slice(0, 10).map(({ name }) => name);
-  res.status(200).json({ artists: artistList });
+  ).then((r) => r.json());
+
+  const artistList = data.slice(0, 10).map(({ name, id }) => ({ name, id }));
+  res.status(200).json(artistList);
 }

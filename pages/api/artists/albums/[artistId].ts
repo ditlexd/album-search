@@ -1,15 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { json } from "stream/consumers";
+import exp from "constants";
 
-type Data = {
+export type Album = {
   title: string;
   coverLink: string;
-  trackList: string;
+  tracklist: string;
 };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Album[]>
 ) {
   const { artistId } = req.query;
 
@@ -18,9 +18,17 @@ export default async function handler(
     return;
   }
 
-  const albums = await fetch(
+  const albums: { data: Array<Album & { cover_medium: string }> } = await fetch(
     `https://api.deezer.com/artist/${artistId}/albums`
   ).then((r) => r.json());
 
-  console.log(albums);
+  const list: Album[] = albums.data.map(
+    ({ title, cover_medium, tracklist }) => ({
+      title,
+      coverLink: cover_medium,
+      tracklist,
+    })
+  );
+
+  res.status(200).send(list);
 }

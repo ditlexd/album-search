@@ -15,7 +15,7 @@ export default function AlbumList({ artistId }: Props) {
     }
 
     fetchAlbums();
-  }, []);
+  }, [artistId]);
 
   return (
     <div className={"col-span-4 col-start-2 mt-20"}>
