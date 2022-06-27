@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import type { Album } from "../pages/api/artists/albums/[artistId]";
+import AlbumInfo from "./album-info";
 
-type Props = { artistId: string };
+type Props = { artistId: string; onAlbumSelected: (album: Album) => void };
 
-export default function AlbumList({ artistId }: Props) {
+export default function AlbumList({ artistId, onAlbumSelected }: Props) {
   const [albums, setAlbums] = useState<Album[]>([]);
 
   useEffect(() => {
@@ -17,14 +18,25 @@ export default function AlbumList({ artistId }: Props) {
     fetchAlbums();
   }, [artistId]);
 
+  async function fetchTracklist(album: Album) {
+    onAlbumSelected(album);
+    const tracklist = await fetch(
+      "/api/artists/albums/tracks/" + album.id
+    ).then((res) => res.json());
+  }
+
   return (
     <div className={"col-span-4 col-start-2 mt-20"}>
-      <h2 className={"text-cyan-500"}>ALBUMS</h2>
       <div className={"flex flex-wrap justify-center gap-14 text-gray-300"}>
-        {albums.map(({ title, coverLink }, i) => {
+        {albums.map(({ title, coverLink, tracklist, id }, i) => {
           return (
             <div
-              className={"flex w-1/6 flex-col items-center text-cyan-500"}
+              onClick={() =>
+                fetchTracklist({ title, coverLink, tracklist, id })
+              }
+              className={
+                "flex w-1/6 cursor-pointer  flex-col items-center text-cyan-500"
+              }
               key={title + i}
             >
               <img src={coverLink} className={"mb-6"} />

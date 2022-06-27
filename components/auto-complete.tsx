@@ -30,6 +30,7 @@ export default function AutoComplete({
       <Combobox value={selectedItem} onChange={itemSelected}>
         <div className={"relative w-full"}>
           <Combobox.Input
+            placeholder={"Search here"}
             className={"h-20 w-full bg-gray-800 pl-2 text-3xl text-gray-300"}
             onChange={(event) => inputChanged(event.target.value)}
           />
