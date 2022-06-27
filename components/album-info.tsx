@@ -1,6 +1,7 @@
 import { Album } from "../pages/api/artists/albums/[artistId]";
 import { useEffect, useState } from "react";
 import { Track } from "../pages/api/artists/albums/tracks/[albumId]";
+import { getTrackListByAlbumId } from "../lib/data-provider-utils";
 
 type Props = { album: Album };
 
@@ -8,13 +9,11 @@ export default function AlbumInfo({ album }: Props) {
   const [trackList, setTrackList] = useState<Track[]>([]);
 
   useEffect(() => {
-    async function fetchTracklist(album: Album) {
-      const tracklist = await fetch(
-        "/api/artists/albums/tracks/" + album.id
-      ).then((res) => res.json());
+    async function getTrackList(album: Album) {
+      const tracklist = await getTrackListByAlbumId(album.id);
       setTrackList(tracklist);
     }
-    fetchTracklist(album);
+    getTrackList(album);
   }, [album]);
 
   if (trackList.length === 0) return null;

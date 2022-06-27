@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Album } from "../pages/api/artists/albums/[artistId]";
 import AlbumInfo from "./album-info";
+import { getAlbumsByArtistId } from "../lib/data-provider-utils";
 
 type Props = { artistId: string; onAlbumSelected: (album: Album) => void };
 
@@ -8,22 +9,13 @@ export default function AlbumList({ artistId, onAlbumSelected }: Props) {
   const [albums, setAlbums] = useState<Album[]>([]);
 
   useEffect(() => {
-    async function fetchAlbums() {
-      const albumList = await fetch(`/api/artists/albums/${artistId}`).then(
-        (res) => res.json()
-      );
+    async function getAlbums() {
+      const albumList = await getAlbumsByArtistId(artistId);
       setAlbums(albumList);
     }
 
-    fetchAlbums();
+    getAlbums();
   }, [artistId]);
-
-  async function fetchTracklist(album: Album) {
-    onAlbumSelected(album);
-    const tracklist = await fetch(
-      "/api/artists/albums/tracks/" + album.id
-    ).then((res) => res.json());
-  }
 
   return (
     <div className={"col-span-4 col-start-2 mt-20"}>
@@ -32,7 +24,7 @@ export default function AlbumList({ artistId, onAlbumSelected }: Props) {
           return (
             <div
               onClick={() =>
-                fetchTracklist({ title, coverLink, tracklist, id })
+                onAlbumSelected({ title, coverLink, tracklist, id })
               }
               className={
                 "flex w-1/6 cursor-pointer  flex-col items-center text-cyan-500"

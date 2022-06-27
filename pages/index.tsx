@@ -5,6 +5,7 @@ import AlbumList from "../components/album-list";
 import { Artist } from "./api/artists/[artist]";
 import AlbumInfo from "../components/album-info";
 import { Album } from "./api/artists/albums/[artistId]";
+import { getArtistByQuery } from "../lib/data-provider-utils";
 
 const Home: NextPage = () => {
   const [artists, setArtists] = useState<Artist[]>([]);
@@ -14,11 +15,8 @@ const Home: NextPage = () => {
   > | null>(null);
   const [selectedAlbum, setSelectedAlbum] = useState<Album | null>(null);
 
-  async function fetchArtists(query: string) {
-    const fetchedArtists = await fetch("/api/artists/" + query).then((res) =>
-      res.json()
-    );
-
+  async function getArtists(query: string) {
+    const fetchedArtists = await getArtistByQuery(query);
     setArtists(fetchedArtists);
   }
 
@@ -32,7 +30,7 @@ const Home: NextPage = () => {
       <div className={"col-span-4 col-start-2"}>
         <AutoComplete
           onSelect={onArtistSelected}
-          onInputChange={fetchArtists}
+          onInputChange={getArtists}
           items={artists.map(({ name, id }) => {
             return { displayValue: name, id };
           })}
