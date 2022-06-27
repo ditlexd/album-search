@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import type { Album } from "../pages/api/artists/albums/[artistId]";
-import AlbumInfo from "./album-info";
 import { getAlbumsByArtistId } from "../lib/data-provider-utils";
 
 type Props = { artistId: string; onAlbumSelected: (album: Album) => void };
@@ -31,7 +30,7 @@ export default function AlbumList({ artistId, onAlbumSelected }: Props) {
               }
               key={title + i}
             >
-              <img src={coverLink} className={"mb-6"} />
+              <img alt={"Album cover art"} src={coverLink} className={"mb-6"} />
               <p>{title}</p>
             </div>
           );

@@ -20,7 +20,11 @@ export default function AlbumInfo({ album }: Props) {
 
   return (
     <div className={"flex w-full pt-20"}>
-      <img className={"h-1/3"} src={album.coverLink} />
+      <img
+        alt={"Image of album art"}
+        className={"h-1/3"}
+        src={album.coverLink}
+      />
       <div className={"ml-8 w-full"}>
         <h2 className={"mb-10 text-5xl text-cyan-500"}>{album.title}</h2>
         <table className={"w-full text-left text-gray-300"}>
