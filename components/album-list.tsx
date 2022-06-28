@@ -19,19 +19,21 @@ export default function AlbumList({ artistId, onAlbumSelected }: Props) {
   return (
     <div className={"col-span-4 col-start-2 mt-20"}>
       <div className={"flex flex-wrap justify-center gap-14 text-gray-300"}>
-        {albums.map(({ title, coverLink, tracklist, id }, i) => {
+        {albums.map((album, i) => {
           return (
             <div
-              onClick={() =>
-                onAlbumSelected({ title, coverLink, tracklist, id })
-              }
+              onClick={() => onAlbumSelected(album)}
               className={
-                "flex w-1/6 cursor-pointer  flex-col items-center text-cyan-500"
+                "flex w-1/6 cursor-pointer  flex-col items-center text-tidal-cyan"
               }
-              key={title + i}
+              key={album.title + i}
             >
-              <img alt={"Album cover art"} src={coverLink} className={"mb-6"} />
-              <p>{title}</p>
+              <img
+                alt={"Album cover art"}
+                src={album.coverLink}
+                className={"mb-6"}
+              />
+              <p>{album.title}</p>
             </div>
           );
         })}

@@ -4,7 +4,11 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "tidal-cyan": "rgb(34 211 238 / var(--tw-bg-opacity))",
+      },
+    },
   },
   plugins: [],
 };

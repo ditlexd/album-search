@@ -57,7 +57,7 @@ export default function AutoComplete({
           </Combobox.Options>
         </div>
       </Combobox>
-      <button className={"w-1/6 rounded-sm bg-teal-300"}>Search</button>
+      <button className={"w-1/6 rounded-sm bg-tidal-cyan"}>Search</button>
     </div>
   );
 }

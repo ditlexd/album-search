@@ -24,11 +24,14 @@ export default async function handler(
 
   const list = trackList.data.map(({ title, duration, artist }: Track) => ({
     title,
-    duration,
+    duration: parseDuration(duration),
     artist,
   }));
 
-  console.log(list);
-
   res.status(200).send(list);
+}
+function parseDuration(duration: number) {
+  const minutes = Math.floor(duration / 60);
+  const seconds = duration % 60;
+  return minutes + ":" + seconds;
 }

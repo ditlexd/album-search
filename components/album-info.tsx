@@ -26,7 +26,7 @@ export default function AlbumInfo({ album }: Props) {
         src={album.coverLink}
       />
       <div className={"ml-8 w-full"}>
-        <h2 className={"mb-10 text-5xl text-cyan-500"}>{album.title}</h2>
+        <h2 className={"mb-10 text-5xl text-tidal-cyan"}>{album.title}</h2>
         <table className={"w-full text-left text-gray-300"}>
           <thead className={"font-bold text-gray-200"}>
             <tr>
@@ -45,7 +45,7 @@ export default function AlbumInfo({ album }: Props) {
                   <td>{track.title}</td>
                   <td>{track.artist.name}</td>
                   <td>{track.duration}</td>
-                  <td>2011</td>
+                  <td>{new Date(album.release_date).getFullYear()}</td>
                 </tr>
               );
             })}

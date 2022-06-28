@@ -6,6 +6,7 @@ export type Album = {
   coverLink: string;
   tracklist: string;
   id: string;
+  release_date: Date;
 };
 
 export default async function handler(
@@ -24,11 +25,12 @@ export default async function handler(
   ).then((r) => r.json());
 
   const list: Album[] = albums.data.map(
-    ({ title, cover_medium, tracklist, id }) => ({
+    ({ title, cover_medium, tracklist, id, release_date }) => ({
       title,
       coverLink: cover_medium,
       tracklist,
       id,
+      release_date: new Date(release_date),
     })
   );
 
